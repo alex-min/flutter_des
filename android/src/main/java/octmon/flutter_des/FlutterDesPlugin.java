@@ -60,7 +60,7 @@ public class FlutterDesPlugin implements FlutterPlugin, MethodCallHandler {
     channel.setMethodCallHandler(null);
   }
 
-  private static final String ALGORITHM_DES = "DES/CBC/PKCS5Padding";
+  private static final String ALGORITHM_DES = "DES/CBC/PKCS7Padding";
 
   /**
    * 加密
@@ -72,14 +72,14 @@ public class FlutterDesPlugin implements FlutterPlugin, MethodCallHandler {
   /**
    * 解密
    */
-  private static String decryptFromHex(String encryptHexStr, String secretKey, String iv) {
+  private static byte[] decryptFromHex(String encryptHexStr, String secretKey, String iv) {
     if(encryptHexStr == null || iv == null)
       return null;
     try {
         return decrypt(hex2byte(encryptHexStr.getBytes()), secretKey, iv);
     } catch (Exception e){
       e.printStackTrace();
-      return "";
+      return null;
     }
   }
 
@@ -117,7 +117,7 @@ public class FlutterDesPlugin implements FlutterPlugin, MethodCallHandler {
    * @param iv  偏移量
    * @return 解密后的字节数组
    */
-  private static String decrypt(byte[] data, String key, String iv) {
+  private static byte[] decrypt(byte[] data, String key, String iv) {
     if(data == null || iv == null)
       return null;
     try {
@@ -128,10 +128,10 @@ public class FlutterDesPlugin implements FlutterPlugin, MethodCallHandler {
       Cipher cipher = Cipher.getInstance(ALGORITHM_DES);
       AlgorithmParameterSpec paramSpec = new IvParameterSpec(iv.getBytes());
       cipher.init(Cipher.DECRYPT_MODE, secretKey, paramSpec);
-      return new String(cipher.doFinal(data));
+      return cipher.doFinal(data);
     } catch (Exception e){
       e.printStackTrace();
-      return "";
+      return null;
     }
   }
 

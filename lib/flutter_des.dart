@@ -39,23 +39,23 @@ class FlutterDes {
     return crypt;
   }
 
-  static Future<String?> decrypt(Uint8List data, String key,
+  static Future<Uint8List?> decrypt(Uint8List data, String key,
       {String iv = _iv}) async {
-    final String? crypt =
+    final Uint8List? crypt =
         await _channel.invokeMethod('decrypt', [data, key, iv]);
     return crypt;
   }
 
-  static Future<String?> decryptFromHex(String? hex, String key,
+  static Future<Uint8List?> decryptFromHex(String? hex, String key,
       {String iv = _iv}) async {
-    final String? crypt =
+    final Uint8List? crypt =
         await _channel.invokeMethod('decryptFromHex', [hex, key, iv]);
     return crypt;
   }
 
-  static Future<String?> decryptFromBase64(String base64, String key,
+  static Future<Uint8List?> decryptFromBase64(String base64, String key,
       {String iv = _iv}) async {
-    final String? crypt = await decrypt(base64Decode(base64), key, iv: iv);
+    final Uint8List? crypt = await decrypt(base64Decode(base64), key, iv: iv);
     return crypt;
   }
 }
